@@ -7,7 +7,7 @@ export type MediaListData = {
 };
 
 export type MediaList = {
-  id: string;
+  // id: string;
   title: string;
   data: MediaListData[];
 };

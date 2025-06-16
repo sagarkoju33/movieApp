@@ -1,5 +1,5 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type MediaInfoProps = {
   title: string;
@@ -34,7 +34,7 @@ export default function MediaInfo(props: MediaInfoProps) {
           {type === "MOVIE" ? `${duration}min` : `${nrOfSeasons} seasons`}
         </Text>
       </View>
-      <Image
+      {/* <Image
         source={{ uri: thumbnail }}
         style={{
           width: "100%",
@@ -42,7 +42,7 @@ export default function MediaInfo(props: MediaInfoProps) {
           borderRadius: 5,
           marginHorizontal: 4,
         }}
-      />
+      /> */}
       <Pressable
         style={styles.playButton}
         onPress={() => console.log("Pressed")}
