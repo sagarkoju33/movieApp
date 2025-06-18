@@ -13,12 +13,12 @@ type MediaHeaderProps = {
   thumbnail: string;
   trailerPlayer: VideoPlayer;
   mediaPlayer: VideoPlayer;
-  //   videoViewRef: React.RefObject<VideoView | null>;
+  videoViewRef: React.RefObject<VideoView | null>;
 };
 
 export default function MediaHeader(props: MediaHeaderProps) {
   const [isTrailerLoading, setIsTrailerLoading] = useState(true);
-  const { thumbnail, trailerPlayer, mediaPlayer } = props;
+  const { thumbnail, trailerPlayer, mediaPlayer, videoViewRef } = props;
   return (
     <View style={styles.container}>
       <AntDesign
@@ -41,14 +41,16 @@ export default function MediaHeader(props: MediaHeaderProps) {
         player={trailerPlayer}
         onFirstFrameRender={() => setIsTrailerLoading(false)}
       />
-      {/* <VideoView 
-        ref={videoViewRef}
-        player={mediaPlayer}
-        onFullscreenExit={() => {
-          mediaPlayer.pause();
-          trailerPlayer.play();
-        }}
-      /> */}
+      {
+        <VideoView
+          ref={videoViewRef}
+          player={mediaPlayer}
+          onFullscreenExit={() => {
+            mediaPlayer.pause();
+            trailerPlayer.play();
+          }}
+        />
+      }
     </View>
   );
 }

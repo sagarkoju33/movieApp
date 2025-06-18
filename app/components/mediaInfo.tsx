@@ -10,6 +10,7 @@ type MediaInfoProps = {
   type: string;
   nrOfSeasons?: number;
   thumbnail?: string;
+  onPlayMediaPressed: () => void;
 };
 
 export default function MediaInfo(props: MediaInfoProps) {
@@ -22,6 +23,7 @@ export default function MediaInfo(props: MediaInfoProps) {
     type,
     nrOfSeasons,
     thumbnail,
+    onPlayMediaPressed,
   } = props;
 
   return (
@@ -43,15 +45,14 @@ export default function MediaInfo(props: MediaInfoProps) {
           marginHorizontal: 4,
         }}
       /> */}
-      <Pressable
-        style={styles.playButton}
-        onPress={() => console.log("Pressed")}
-      >
+      <Pressable style={styles.playButton} onPress={() => onPlayMediaPressed()}>
         <FontAwesome name="play" size={20} color="black" />
         <Text style={{ fontWeight: "600" }}>Play</Text>
       </Pressable>
 
-      <Text style={{ color: "white" }}>{description}</Text>
+      <Text style={{ color: "white", paddingHorizontal: 10 }}>
+        {description}
+      </Text>
     </View>
   );
 }
@@ -66,12 +67,15 @@ const styles = StyleSheet.create({
     gap: 8,
     marginVertical: 10,
     alignItems: "center",
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
   },
   title: {
     color: "white",
     fontSize: 18,
     fontWeight: "600",
     letterSpacing: 0.5,
+    paddingHorizontal: 10,
   },
   ageText: {
     color: "white",
@@ -87,5 +91,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     gap: 5,
+    paddingHorizontal: 10,
   },
 });

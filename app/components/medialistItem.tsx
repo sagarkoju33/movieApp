@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { Image, Pressable } from "react-native";
-import { MediaListData } from "../types/type";
+import { MediaListData } from "../../types/type";
 type MediaListItemProps = {
   mediaItem: MediaListData;
 };

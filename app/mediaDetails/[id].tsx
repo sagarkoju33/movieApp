@@ -1,35 +1,43 @@
-import mediaDetailedList from "@/assets/data/mediaDetailedList.json";
 import { useLocalSearchParams } from "expo-router";
-import { useVideoPlayer } from "expo-video";
-import { Text } from "react-native";
+import * as ExpoVideo from "expo-video";
+import { VideoView } from "expo-video";
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import mediaDetailedList from "../../assets/data/mediaDetailedList.json";
+import { Episode } from "../../types/type";
+import EpisodeListItem from "../components/episodeListItem";
 import MediaHeader from "../components/mediaHeader";
 import MediaInfo from "../components/mediaInfo";
+import SeasonSelector from "../components/seasonSelectorMenu";
 export default function MediaDetails() {
   const { id } = useLocalSearchParams();
-
   const mediaItem = mediaDetailedList.find((media) => media.id === id);
-  // const [isTrailerLoading, setIsTrailerLoading] = useState<boolean>(true);
-  // const videoViewRef = useRef<VideoView | null>(null);
-  // Prepare default values to satisfy hooks' dependencies
+  const videoViewRef = useRef<VideoView | null>(null);
+  const [selectedSeason, setSelectedSeason] = useState<string>("Season 1");
+  const [seasonEpisodes, setSeasonEpisodes] = useState<Episode[]>([]);
+  const [episodeLoadingId, setEpisodeLoadingId] = useState<string | null>(null);
 
-  if (!mediaItem) {
-    return <Text>Media Not Found!</Text>;
-  }
   const {
-    type,
-    title,
-    description,
+    type = "",
+    title = "",
+    description = "",
     releaseYear = 0,
-    ageRestriction,
+    ageRestriction = "",
     duration = 0,
-    thumbnail,
-    trailer,
-    videoUrl,
+    thumbnail = "",
+    trailer = "",
+    videoUrl = "",
     seasons = [],
-  } = mediaItem;
-
-  const trailerPlayer = useVideoPlayer(trailer ?? "", (player) => {
+  } = mediaItem ?? {};
+  useEffect(() => {
+    if (!mediaItem || type !== "TV_SERIES") return;
+    const season = mediaItem.seasons?.find(
+      (seasonItem) => seasonItem.seasonName === selectedSeason
+    );
+    setSeasonEpisodes(season?.episodes || []);
+  }, [selectedSeason, mediaItem, type]);
+  const trailerPlayer = ExpoVideo.useVideoPlayer(trailer, (player) => {
     if (player) {
       player.currentTime = 10;
       player.play();
@@ -37,15 +45,29 @@ export default function MediaDetails() {
   });
   const videoSource =
     type === "MOVIE" ? videoUrl : seasons?.[0]?.episodes?.[0]?.videoUrl;
-  const mediaPlayer = useVideoPlayer(videoSource ?? "", (player) => {
+  const mediaPlayer = ExpoVideo.useVideoPlayer(videoSource ?? "", (player) => {
     if (player) {
       player.showNowPlayingNotification = true;
     }
   });
 
+  if (!mediaItem) {
+    return <Text>Media Not Found!</Text>;
+  }
+
   if (!videoSource) {
     return <Text>No playable video found.</Text>;
   }
+  const onPlayMediaPressed = async (video?: string, episodeId?: string) => {
+    trailerPlayer.pause();
+    if (video && episodeId) {
+      setEpisodeLoadingId(episodeId);
+      await mediaPlayer.replaceAsync(video);
+      setEpisodeLoadingId(null);
+    }
+    videoViewRef.current?.enterFullscreen();
+    mediaPlayer.play();
+  };
 
   return (
     <SafeAreaView>
@@ -53,20 +75,42 @@ export default function MediaDetails() {
         thumbnail={thumbnail ?? ""}
         trailerPlayer={trailerPlayer}
         mediaPlayer={mediaPlayer}
+        videoViewRef={videoViewRef}
       />
-      <MediaInfo
-        title={title ?? ""}
-        releaseYear={releaseYear ?? ""}
-        ageRestriction={ageRestriction ?? ""}
-        duration={duration ?? 0}
-        description={description ?? ""}
-        type={type ?? ""}
-        thumbnail={thumbnail}
-        nrOfSeasons={seasons?.length}
+      <FlatList
+        data={seasonEpisodes}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <EpisodeListItem
+            episode={item}
+            onPlayMediaPressed={onPlayMediaPressed}
+            isEpisodeLoading={episodeLoadingId === item.id}
+          />
+        )}
+        ListHeaderComponent={
+          <View>
+            <MediaInfo
+              title={title ?? ""}
+              releaseYear={releaseYear ?? ""}
+              ageRestriction={ageRestriction ?? ""}
+              duration={duration ?? 0}
+              description={description ?? ""}
+              type={type ?? ""}
+              thumbnail={thumbnail}
+              nrOfSeasons={seasons?.length}
+              onPlayMediaPressed={onPlayMediaPressed}
+            />
+
+            {type === "TV_SERIES" && !!seasons && (
+              <SeasonSelector
+                seasons={seasons}
+                selectedSeason={selectedSeason}
+                setSelectedSeason={setSelectedSeason}
+              />
+            )}
+          </View>
+        }
       />
     </SafeAreaView>
   );
-}
-function useRef<T>(arg0: null) {
-  throw new Error("Function not implemented.");
 }

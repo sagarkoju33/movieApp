@@ -1,7 +1,7 @@
-import mediaList from "@/assets/data/mediaList.json";
 import { Feather } from "@expo/vector-icons";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import mediaList from "../../assets/data/mediaList.json";
 import MediaListItem from "../components/medialistItem";
 export default function HomeScreen() {
   return (
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     paddingVertical: 10,
+    paddingHorizontal: 14,
   },
   headerTitle: {
     color: "white",

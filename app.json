@@ -2,7 +2,7 @@
   "expo": {
     "name": "movieApp",
     "slug": "movieApp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "movieapp",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.sagarkoju.movieApp"
     },
     "web": {
       "bundler": "metro",
@@ -36,12 +37,15 @@
       ],
       "expo-video"
     ],
-    "rules": {
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn"
-    },
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "86ebef2f-3f28-4f2d-a731-7b44716b845c"
+      }
+    },
+    "owner": "sagarkoju1"
   }
 }
