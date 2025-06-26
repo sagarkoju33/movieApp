@@ -59,14 +59,20 @@ export default function MediaDetails() {
     return <Text>No playable video found.</Text>;
   }
   const onPlayMediaPressed = async (video?: string, episodeId?: string) => {
-    trailerPlayer.pause();
-    if (video && episodeId) {
-      setEpisodeLoadingId(episodeId);
-      await mediaPlayer.replaceAsync(video);
-      setEpisodeLoadingId(null);
+    try {
+      trailerPlayer.pause();
+      if (video && episodeId) {
+        setEpisodeLoadingId(episodeId);
+        await mediaPlayer.replaceAsync(video);
+
+        setEpisodeLoadingId(null);
+        await new Promise((res) => setTimeout(res, 500)); // small delay
+      }
+      videoViewRef.current?.enterFullscreen();
+      mediaPlayer.play();
+    } catch (error) {
+      console.error("Video play error", error);
     }
-    videoViewRef.current?.enterFullscreen();
-    mediaPlayer.play();
   };
 
   return (

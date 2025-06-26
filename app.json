@@ -9,15 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": ["INTERNET"]
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.sagarkoju.movieApp"
+      "package": "com.app.movieApp",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -46,6 +51,9 @@
         "projectId": "86ebef2f-3f28-4f2d-a731-7b44716b845c"
       }
     },
-    "owner": "sagarkoju1"
+    "owner": "sagarkoju1",
+    "updates": {
+      "url": "https://u.expo.dev/86ebef2f-3f28-4f2d-a731-7b44716b845c"
+    }
   }
 }

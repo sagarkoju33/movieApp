@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 export default function MyNetFlix() {
   return (
     <View>
-      <Text>MyNetFlix</Text>
+      <Text style={{ color: "white", padding: 20 }}>MyNetFlix</Text>
     </View>
   );
 }
